@@ -1,36 +1,23 @@
-import 'dart:typed_data';
-
 class UsbDevice {
-  requestDevices(List<DeviceFilter> filters) {
-    return;
-  }
+  String type;
+  String productId;
+  String vendorId;
+  bool connected = false;
 
-  /// Start session with the device
-  open(dynamic device) {
-    return;
-  }
-
-  /// close session with the device
-  close(dynamic device) {
-    return;
-  }
-
-  /// Claims the interface of the device
-  claimInterface(dynamic device, int interfaceNumber) {
-    return;
-  }
-
-  transferOut(dynamic device, endpointNumber, ByteBuffer data) {
-    return;
-  }
-}
-
-class DeviceFilter {
-  final int vendorId;
-  final int productId;
-
-  DeviceFilter({
-    required this.vendorId,
+  UsbDevice({
+    required this.type,
     required this.productId,
+    required this.vendorId,
+    this.connected = false,
   });
+
+  factory UsbDevice.fromMap(Map<String, dynamic> map,
+      {bool connected = false}) {
+    return UsbDevice(
+      type: map['type'],
+      productId: map['productId'],
+      vendorId: map['vendorId'],
+      connected: connected,
+    );
+  }
 }

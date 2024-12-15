@@ -4,23 +4,44 @@
 // ignore: avoid_web_libraries_in_flutter
 
 import 'dart:developer';
-import 'dart:html';
+import 'package:web/web.dart';
 import 'dart:js' as js;
 import 'package:flutter/foundation.dart';
 import 'package:flutter_web_plugins/flutter_web_plugins.dart';
 import 'package:thermal_usb/model/usb_device.dart';
-
 import 'thermal_usb_platform_interface.dart';
 
 /// A web implementation of the ThermalUsbPlatform of the ThermalUsb plugin.
 class ThermalUsbWeb extends ThermalUsbPlatform {
   /// Constructs a ThermalUsbWeb
-  ThermalUsbWeb();
-  final UsbDevice usbDevice = UsbDevice();
+
+  static UsbDevice? usbDevice;
+
+  static final ThermalUsbWeb _staticInstance = ThermalUsbWeb();
+
+  static Stream eventSubscription = Stream.empty();
+
+  static ThermalUsbWeb getInstance() {
+    return _staticInstance;
+  }
 
   static void registerWith(Registrar registrar) {
     ThermalUsbPlatform.instance = ThermalUsbWeb();
     // loadJavaScript();
+    js.context['onDeviceConnected'] = js.allowInterop((js.JsObject device) {
+      log('Device connected: $device');
+      // convert JSObject to Map
+      usbDevice = UsbDevice(
+          type: "type",
+          connected: true,
+          productId: "productId",
+          vendorId: "vendorId");
+    });
+
+    js.context['onDeviceDisconnected'] = js.allowInterop(() {
+      log('Device disconnected: ');
+      usbDevice = null;
+    });
   }
 
   /// Returns a [String] containing the version of the platform.
@@ -38,6 +59,9 @@ class ThermalUsbWeb extends ThermalUsbPlatform {
 
   @override
   Future<void> pairDevice() async {
+    if (usbDevice != null) {
+      return;
+    }
     try {
       js.context.callMethod("connectUSBDevice");
     } catch (e) {
@@ -48,6 +72,9 @@ class ThermalUsbWeb extends ThermalUsbPlatform {
   @override
   Future<bool> print({List<int> data = const []}) async {
     try {
+      if (usbDevice == null) {
+        return Future.value(false);
+      }
       js.context.callMethod("print", [Uint8List.fromList(data)]);
     } catch (e) {
       log(e.toString());
@@ -56,11 +83,10 @@ class ThermalUsbWeb extends ThermalUsbPlatform {
   }
 
   static Future<void> loadJavaScript() async {
-    final script = document.createElement('script') as ScriptElement;
+    final script = document.createElement('script') as HTMLScriptElement;
     script.src = 'assets/lib/usb_connector.js';
     script.type = 'text/javascript';
-    script.async = true;
-    document.head!.append(script);
+    document.body!.append(script);
 
     // Wait for the script to load
     await script.onLoad.first;

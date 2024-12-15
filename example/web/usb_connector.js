@@ -8,6 +8,7 @@ if ("usb" in navigator) {
     try {
       receiptPrinter.addEventListener("connected", (device) => {
         console.log({ device });
+        window.onDeviceConnected(device);
       });
 
       receiptPrinter.addEventListener("disconnect", () => {
