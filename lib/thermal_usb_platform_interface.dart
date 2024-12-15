@@ -26,4 +26,8 @@ abstract class ThermalUsbPlatform extends PlatformInterface {
   Future<String?> getPlatformVersion() {
     throw UnimplementedError('platformVersion() has not been implemented.');
   }
+
+  Future<String?> getThermalStatus() {
+    throw UnimplementedError('getThermalStatus() has not been implemented.');
+  }
 }

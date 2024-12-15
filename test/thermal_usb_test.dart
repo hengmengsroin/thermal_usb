@@ -7,9 +7,11 @@ import 'package:plugin_platform_interface/plugin_platform_interface.dart';
 class MockThermalUsbPlatform
     with MockPlatformInterfaceMixin
     implements ThermalUsbPlatform {
-
   @override
   Future<String?> getPlatformVersion() => Future.value('42');
+
+  @override
+  Future<String?> getThermalStatus() => Future.value('cool');
 }
 
 void main() {
@@ -25,5 +27,13 @@ void main() {
     ThermalUsbPlatform.instance = fakePlatform;
 
     expect(await thermalUsbPlugin.getPlatformVersion(), '42');
+  });
+
+  test('getThermalStatus', () async {
+    ThermalUsb thermalUsbPlugin = ThermalUsb();
+    MockThermalUsbPlatform fakePlatform = MockThermalUsbPlatform();
+    ThermalUsbPlatform.instance = fakePlatform;
+
+    expect(await thermalUsbPlugin.getThermalStatus(), 'cool');
   });
 }

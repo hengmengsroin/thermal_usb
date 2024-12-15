@@ -11,7 +11,14 @@ class MethodChannelThermalUsb extends ThermalUsbPlatform {
 
   @override
   Future<String?> getPlatformVersion() async {
-    final version = await methodChannel.invokeMethod<String>('getPlatformVersion');
+    final version =
+        await methodChannel.invokeMethod<String>('getPlatformVersion');
     return version;
+  }
+
+  @override
+  Future<String?> getThermalStatus() async {
+    final status = await methodChannel.invokeMethod<String>('getThermalStatus');
+    return status;
   }
 }

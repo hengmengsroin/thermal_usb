@@ -23,4 +23,15 @@ class ThermalUsbWeb extends ThermalUsbPlatform {
     final version = web.window.navigator.userAgent;
     return version;
   }
+
+  /// Returns a [String] containing the thermal status of the platform.
+  /// This is a placeholder implementation that always returns 'cool'.
+  /// This method should be overridden in a platform-specific implementation.
+  /// See: https://flutter.dev/docs/development/platform-integration/platform-channels
+  /// https://flutter.dev/docs/development/packages-and-plugins/developing-packages#platform-interface
+
+  @override
+  Future<String?> getThermalStatus() async {
+    return 'cool';
+  }
 }
