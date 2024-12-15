@@ -1,14 +1,26 @@
 // usb_connector.js
 if ('usb' in navigator) {
   console.log('WebUSB API is supported in this browser.');
-  async function connectUSBDevice() {
+  async function connectUSBDevice(vendorId) {
     try {
+       const filters = [];
+      if (vendorId) {
+        filters.push({ vendorId: vendorId });
+      }
+
+      navigator.usb.getDevices().then((devices) => {
+        devices.forEach((device) => {
+          console.log(device.productName); // "Arduino Micro"
+          console.log(device.manufacturerName); // "Arduino LLC"
+        });
+      });
+      
       const device = await navigator.usb.requestDevice({
-        filters: [{ vendorId: 0x1234 }] // Replace with your device's vendorId
+        filters:filters // Replace with your device's vendorId
       });
 
       console.log(`Device selected: ${device.productName}`);
-
+      
       await device.open();
       console.log('Device opened.');
 
