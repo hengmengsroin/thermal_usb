@@ -1,8 +1,16 @@
 // usb_connector.js
 if ("usb" in navigator) {
   console.log("WebUSB API is supported in this browser.");
-  // const receiptPrinter = new WebUSBReceiptPrinter();
-  const receiptPrinter = new WebSerialReceiptPrinter();
+  const userAgent = navigator.userAgent.toLowerCase();
+  const isWindows = userAgent.indexOf("windows") !== -1;
+  let receiptPrinter;
+  if (isWindows) {
+    console.log("Using WebSerialReceiptPrinter");
+    receiptPrinter = new WebSerialReceiptPrinter();
+  } else {
+    console.log("Using WebUSBReceiptPrinter");
+    receiptPrinter = new WebUSBReceiptPrinter();
+  }
   receiptPrinter.addEventListener("connected", (device) => {
     console.log({ device });
     console.log(
