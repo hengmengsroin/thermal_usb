@@ -7,7 +7,7 @@ import 'dart:developer';
 import 'dart:html';
 import 'dart:js' as js;
 import 'package:flutter/foundation.dart';
-import 'package:flutter_web_plugins/flutter_web_plugins.dart';
+// import 'package:web/web.dart';
 import 'package:thermal_usb/model/usb_device.dart';
 
 import 'thermal_usb_platform_interface.dart';
@@ -18,10 +18,10 @@ class ThermalUsbWeb extends ThermalUsbPlatform {
   ThermalUsbWeb();
   final UsbDevice usbDevice = UsbDevice();
 
-  static void registerWith(Registrar registrar) {
-    ThermalUsbPlatform.instance = ThermalUsbWeb();
-    // loadJavaScript();
-  }
+  // static void registerWith(Registrar registrar) {
+  // ThermalUsbPlatform.instance = ThermalUsbWeb();
+  // loadJavaScript();
+  // }
 
   /// Returns a [String] containing the version of the platform.
   @override

@@ -5,13 +5,13 @@ homepage: "https://www.example.com"
 
 environment:
   sdk: ^3.6.0
-  flutter: '>=3.3.0'
+  flutter: ">=3.3.0"
 
 dependencies:
   flutter:
     sdk: flutter
-  flutter_web_plugins:
-    sdk: flutter
+  # flutter_web_plugins:
+  #   sdk: flutter
   web: ^1.1.0
   plugin_platform_interface: ^2.1.8
 
