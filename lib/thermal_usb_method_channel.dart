@@ -23,22 +23,13 @@ class MethodChannelThermalUsb extends ThermalUsbPlatform {
   }
 
   @override
-  Future<bool> printTest() async {
+  Future<bool> printTest({List<int> data = const []}) async {
     await methodChannel.invokeMethod<String>('printTest');
     return Future.value(true);
   }
 
   @override
-  Future<void> pairDevice(
-      {int? vendorId,
-      int? productId,
-      int? interfaceNo,
-      int? endpointNo}) async {
-    await methodChannel.invokeMethod<String>('pairDevice', {
-      'vendorId': vendorId,
-      'productId': productId,
-      'interfaceNo': interfaceNo,
-      'endpointNo': endpointNo
-    });
+  Future<void> pairDevice() async {
+    await methodChannel.invokeMethod<String>('pairDevice');
   }
 }

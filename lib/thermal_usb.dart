@@ -9,19 +9,11 @@ class ThermalUsb {
     return ThermalUsbPlatform.instance.getThermalStatus();
   }
 
-  Future<bool> printTest() {
-    return ThermalUsbPlatform.instance.printTest();
+  Future<bool> printTest({List<int> data = const []}) {
+    return ThermalUsbPlatform.instance.printTest(data: data);
   }
 
-  Future<void> pairDevice(
-      {required int vendorId,
-      required int productId,
-      int? interfaceNo,
-      int? endpointNo}) {
-    return ThermalUsbPlatform.instance.pairDevice(
-        vendorId: vendorId,
-        productId: productId,
-        interfaceNo: interfaceNo,
-        endpointNo: endpointNo);
+  Future<void> pairDevice() {
+    return ThermalUsbPlatform.instance.pairDevice();
   }
 }

@@ -50,17 +50,7 @@ class ThermalUsbWeb extends ThermalUsbPlatform {
   }
 
   @override
-  Future<void> pairDevice(
-      {int? vendorId,
-      int? productId,
-      int? interfaceNo,
-      int? endpointNo}) async {
-    // interfaceNumber = interfaceNo ?? 0;
-    // endpointNumber = endpointNo ?? 1;
-    // pairedDevice ??= await usbDevice.requestDevices(
-    //     [DeviceFilter(vendorId: vendorId ?? 0, productId: productId ?? 0)]);
-    // await usbDevice.open(pairedDevice);
-    // await usbDevice.claimInterface(pairedDevice, interfaceNumber);
+  Future<void> pairDevice() async {
     try {
       js.context.callMethod("connectUSBDevice");
     } catch (e) {
@@ -69,20 +59,12 @@ class ThermalUsbWeb extends ThermalUsbPlatform {
   }
 
   @override
-  Future<bool> printTest() async {
-    var text = "Hello World!";
-    var centerAlign = true;
-    var encodedText = utf8.encode("$text\n");
-    if (centerAlign) {
-      var width = 28; // Change this to adjust the width of the printer
-      var leftPadding = ((width - text.length) / 2).floor();
-      var rightPadding = width - text.length - leftPadding;
-      var paddingString =
-          ''.padLeft(leftPadding) + text + ''.padRight(rightPadding);
-      encodedText = utf8.encode("\n$paddingString\n");
+  Future<bool> printTest({List<int> data = const []}) async {
+    try {
+      js.context.callMethod("printTest", [Uint8List.fromList(data)]);
+    } catch (e) {
+      log(e.toString());
     }
-    var buffer = Uint8List.fromList(encodedText).buffer;
-    await usbDevice.transferOut(pairedDevice, endpointNumber, buffer);
     return Future.value(true);
   }
 
