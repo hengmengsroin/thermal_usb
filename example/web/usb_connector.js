@@ -6,13 +6,15 @@ if ('usb' in navigator) {
        const filters = [];
       if (vendorId) {
         filters.push({ vendorId: vendorId });
-    }
+      }
+      
       const device = await navigator.usb.requestDevice({
         filters:filters // Replace with your device's vendorId
       });
-
+      
+      console.log({device});
       console.log(`Device selected: ${device.productName}`);
-
+      
       await device.open();
       console.log('Device opened.');
 
