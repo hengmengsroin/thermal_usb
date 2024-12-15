@@ -3,7 +3,7 @@ if ('usb' in navigator) {
   console.log('WebUSB API is supported in this browser.');
   async function connectUSBDevice(vendorId) {
     try {
-       const filters = [];
+       const filters = [ { classCode: 0x07 }];
       if (vendorId) {
         filters.push({ vendorId: vendorId });
       }
