@@ -1,7 +1,7 @@
 name: thermal_usb
-description: "A new Flutter project."
+description: "A plugin for printing to USB thermal printers."
 version: 0.0.1
-homepage:
+homepage: "https://www.example.com"
 
 environment:
   sdk: ^3.6.0
@@ -12,8 +12,8 @@ dependencies:
     sdk: flutter
   flutter_web_plugins:
     sdk: flutter
-  web: ^0.5.1
-  plugin_platform_interface: ^2.0.2
+  web: ^1.1.0
+  plugin_platform_interface: ^2.1.8
 
 dev_dependencies:
   flutter_test:
