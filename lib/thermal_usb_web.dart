@@ -88,7 +88,6 @@ class ThermalUsbWeb extends ThermalUsbPlatform {
     script.type = 'text/javascript';
     document.body!.append(script);
 
-    // Wait for the script to load
     await script.onLoad.first;
     log('JavaScript file loaded successfully.');
   }
