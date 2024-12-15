@@ -30,8 +30,8 @@ class MethodChannelThermalUsb extends ThermalUsbPlatform {
 
   @override
   Future<void> pairDevice(
-      {required int vendorId,
-      required int productId,
+      {int? vendorId,
+      int? productId,
       int? interfaceNo,
       int? endpointNo}) async {
     await methodChannel.invokeMethod<String>('pairDevice', {

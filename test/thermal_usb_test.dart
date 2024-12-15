@@ -18,10 +18,7 @@ class MockThermalUsbPlatform
 
   @override
   Future<void> pairDevice(
-      {required int vendorId,
-      required int productId,
-      int? interfaceNo,
-      int? endpointNo}) {
+      {int? vendorId, int? productId, int? interfaceNo, int? endpointNo}) {
     throw UnimplementedError('pairDevice() has not been implemented.');
   }
 }

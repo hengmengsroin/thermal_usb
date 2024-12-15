@@ -4,11 +4,12 @@
 // ignore: avoid_web_libraries_in_flutter
 
 import 'dart:convert';
-
+import 'dart:developer';
+import 'dart:html';
+import 'dart:js' as js;
 import 'package:flutter/foundation.dart';
 import 'package:flutter_web_plugins/flutter_web_plugins.dart';
 import 'package:thermal_usb/usb_device.dart';
-import 'package:web/web.dart' as web;
 
 import 'thermal_usb_platform_interface.dart';
 
@@ -20,19 +21,20 @@ class ThermalUsbWeb extends ThermalUsbPlatform {
   var pairedDevice;
 
   //By Default, it is usually 0
-  var interfaceNumber;
+  var interfaceNumber = 0;
 
   //By Default, it is usually 1
-  var endpointNumber;
+  var endpointNumber = 1;
 
   static void registerWith(Registrar registrar) {
     ThermalUsbPlatform.instance = ThermalUsbWeb();
+    loadJavaScript();
   }
 
   /// Returns a [String] containing the version of the platform.
   @override
   Future<String?> getPlatformVersion() async {
-    final version = web.window.navigator.userAgent;
+    final version = window.navigator.userAgent;
     return version;
   }
 
@@ -49,16 +51,21 @@ class ThermalUsbWeb extends ThermalUsbPlatform {
 
   @override
   Future<void> pairDevice(
-      {required int vendorId,
-      required int productId,
+      {int? vendorId,
+      int? productId,
       int? interfaceNo,
       int? endpointNo}) async {
-    interfaceNumber = interfaceNo ?? 0;
-    endpointNumber = endpointNo ?? 1;
-    pairedDevice ??= await usbDevice.requestDevices(
-        [DeviceFilter(vendorId: vendorId, productId: productId)]);
-    await usbDevice.open(pairedDevice);
-    await usbDevice.claimInterface(pairedDevice, interfaceNumber);
+    // interfaceNumber = interfaceNo ?? 0;
+    // endpointNumber = endpointNo ?? 1;
+    // pairedDevice ??= await usbDevice.requestDevices(
+    //     [DeviceFilter(vendorId: vendorId ?? 0, productId: productId ?? 0)]);
+    // await usbDevice.open(pairedDevice);
+    // await usbDevice.claimInterface(pairedDevice, interfaceNumber);
+    try {
+      js.context.callMethod("connectUSBDevice");
+    } catch (e) {
+      log(e.toString());
+    }
   }
 
   @override
@@ -77,5 +84,17 @@ class ThermalUsbWeb extends ThermalUsbPlatform {
     var buffer = Uint8List.fromList(encodedText).buffer;
     await usbDevice.transferOut(pairedDevice, endpointNumber, buffer);
     return Future.value(true);
+  }
+
+  static Future<void> loadJavaScript() async {
+    final script = document.createElement('script') as ScriptElement;
+    script.src = '/assets/lib/usb_connector.js';
+    script.type = 'text/javascript';
+    script.async = true;
+    document.head!.append(script);
+
+    // Wait for the script to load
+    await script.onLoad.first;
+    log('JavaScript file loaded successfully.');
   }
 }

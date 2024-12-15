@@ -1,6 +1,6 @@
+import 'dart:developer';
 import 'package:flutter/material.dart';
 import 'dart:async';
-
 import 'package:flutter/services.dart';
 import 'package:thermal_usb/thermal_usb.dart';
 
@@ -31,8 +31,8 @@ class _MyAppState extends State<MyApp> {
     // Platform messages may fail, so we use a try/catch PlatformException.
     // We also handle the message potentially returning null.
     try {
-      platformVersion =
-          await _thermalUsbPlugin.getPlatformVersion() ?? 'Unknown platform version';
+      platformVersion = await _thermalUsbPlugin.getPlatformVersion() ??
+          'Unknown platform version';
     } on PlatformException {
       platformVersion = 'Failed to get platform version.';
     }
@@ -47,6 +47,11 @@ class _MyAppState extends State<MyApp> {
     });
   }
 
+  void connectUSB() {
+    _thermalUsbPlugin.pairDevice(vendorId: 0x0483, productId: 0x5740);
+    log("called pairDevice");
+  }
+
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
@@ -55,7 +60,12 @@ class _MyAppState extends State<MyApp> {
           title: const Text('Plugin example app'),
         ),
         body: Center(
-          child: Text('Running on: $_platformVersion\n'),
+          child: Column(
+            children: [
+              Text('Running on: $_platformVersion\n'),
+              ElevatedButton(onPressed: connectUSB, child: Text("Connect USB"))
+            ],
+          ),
         ),
       ),
     );
