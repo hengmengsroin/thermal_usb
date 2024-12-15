@@ -55,7 +55,7 @@ class _MyAppState extends State<MyApp> {
 
   Future<void> printTest() async {
     var ticket = await testTicket();
-    _thermalUsbPlugin.printTest(data: ticket);
+    _thermalUsbPlugin.print(data: ticket);
     log("called pairDevice");
   }
 

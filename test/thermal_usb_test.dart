@@ -50,7 +50,7 @@ void main() {
     MockThermalUsbPlatform fakePlatform = MockThermalUsbPlatform();
     ThermalUsbPlatform.instance = fakePlatform;
 
-    expect(await thermalUsbPlugin.printTest(), isTrue);
+    expect(await thermalUsbPlugin.print(), isTrue);
   });
 
   tearDown(() {

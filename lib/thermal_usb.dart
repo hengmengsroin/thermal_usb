@@ -9,7 +9,7 @@ class ThermalUsb {
     return ThermalUsbPlatform.instance.getThermalStatus();
   }
 
-  Future<bool> printTest({List<int> data = const []}) {
+  Future<bool> print({List<int> data = const []}) {
     return ThermalUsbPlatform.instance.print(data: data);
   }
 
