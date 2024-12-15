@@ -9,7 +9,6 @@ import 'dart:js' as js;
 import 'package:flutter/foundation.dart';
 import 'package:flutter_web_plugins/flutter_web_plugins.dart';
 import 'package:thermal_usb/model/usb_device.dart';
-
 import 'thermal_usb_platform_interface.dart';
 
 /// A web implementation of the ThermalUsbPlatform of the ThermalUsb plugin.
@@ -55,15 +54,15 @@ class ThermalUsbWeb extends ThermalUsbPlatform {
     return Future.value(true);
   }
 
-  static Future<void> loadJavaScript() async {
-    final script = document.createElement('script') as ScriptElement;
-    script.src = 'assets/lib/usb_connector.js';
-    script.type = 'text/javascript';
-    script.async = true;
-    document.head!.append(script);
+  // static Future<void> loadJavaScript() async {
+  //   final script = document.createElement('script') as ScriptElement;
+  //   script.src = 'assets/lib/usb_connector.js';
+  //   script.type = 'text/javascript';
+  //   script.async = true;
+  //   document.head!.append(script);
 
-    // Wait for the script to load
-    await script.onLoad.first;
-    log('JavaScript file loaded successfully.');
-  }
+  //   // Wait for the script to load
+  //   await script.onLoad.first;
+  //   log('JavaScript file loaded successfully.');
+  // }
 }
