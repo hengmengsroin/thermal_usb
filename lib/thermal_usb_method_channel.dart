@@ -21,4 +21,24 @@ class MethodChannelThermalUsb extends ThermalUsbPlatform {
     final status = await methodChannel.invokeMethod<String>('getThermalStatus');
     return status;
   }
+
+  @override
+  Future<bool> printTest() async {
+    await methodChannel.invokeMethod<String>('printTest');
+    return Future.value(true);
+  }
+
+  @override
+  Future<void> pairDevice(
+      {required int vendorId,
+      required int productId,
+      int? interfaceNo,
+      int? endpointNo}) async {
+    await methodChannel.invokeMethod<String>('pairDevice', {
+      'vendorId': vendorId,
+      'productId': productId,
+      'interfaceNo': interfaceNo,
+      'endpointNo': endpointNo
+    });
+  }
 }

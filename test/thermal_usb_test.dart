@@ -12,6 +12,18 @@ class MockThermalUsbPlatform
 
   @override
   Future<String?> getThermalStatus() => Future.value('cool');
+
+  @override
+  Future<bool> printTest() => Future.value(true);
+
+  @override
+  Future<void> pairDevice(
+      {required int vendorId,
+      required int productId,
+      int? interfaceNo,
+      int? endpointNo}) {
+    throw UnimplementedError('pairDevice() has not been implemented.');
+  }
 }
 
 void main() {
@@ -35,5 +47,27 @@ void main() {
     ThermalUsbPlatform.instance = fakePlatform;
 
     expect(await thermalUsbPlugin.getThermalStatus(), 'cool');
+  });
+
+  test('printTest', () async {
+    ThermalUsb thermalUsbPlugin = ThermalUsb();
+    MockThermalUsbPlatform fakePlatform = MockThermalUsbPlatform();
+    ThermalUsbPlatform.instance = fakePlatform;
+
+    expect(await thermalUsbPlugin.printTest(), isTrue);
+  });
+
+  tearDown(() {
+    ThermalUsbPlatform.instance = initialPlatform;
+  });
+
+  test('pairDevice', () async {
+    ThermalUsb thermalUsbPlugin = ThermalUsb();
+    MockThermalUsbPlatform fakePlatform = MockThermalUsbPlatform();
+    ThermalUsbPlatform.instance = fakePlatform;
+
+    expect(() async {
+      await thermalUsbPlugin.pairDevice(vendorId: 0, productId: 0);
+    }, throwsUnimplementedError);
   });
 }
