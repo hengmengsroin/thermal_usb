@@ -22,10 +22,16 @@ class ThermalUsbPlugin: FlutterPlugin, MethodCallHandler {
   }
 
   override fun onMethodCall(call: MethodCall, result: Result) {
-    if (call.method == "getPlatformVersion") {
-      result.success("Android ${android.os.Build.VERSION.RELEASE}")
-    } else {
-      result.notImplemented()
+    when (call.method) {
+      "getPlatformVersion" -> {
+        result.success("Android ${android.os.Build.VERSION.RELEASE}")
+      }
+      "getThermalStatus" -> {
+        result.success("cool")
+      }
+      else -> {
+        result.notImplemented()
+      }
     }
   }
 

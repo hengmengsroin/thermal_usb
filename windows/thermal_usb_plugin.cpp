@@ -51,7 +51,10 @@ void ThermalUsbPlugin::HandleMethodCall(
       version_stream << "7";
     }
     result->Success(flutter::EncodableValue(version_stream.str()));
-  } else {
+  }else if (method_call.method_name().compare("getThermalStatus") == 0) {
+    result->Success(flutter::EncodableValue("Thermal"));
+  } 
+  else {
     result->NotImplemented();
   }
 }

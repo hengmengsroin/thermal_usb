@@ -12,6 +12,8 @@ public class ThermalUsbPlugin: NSObject, FlutterPlugin {
     switch call.method {
     case "getPlatformVersion":
       result("macOS " + ProcessInfo.processInfo.operatingSystemVersionString)
+    case "getThermalStatus":
+      result("cool")
     default:
       result(FlutterMethodNotImplemented)
     }
