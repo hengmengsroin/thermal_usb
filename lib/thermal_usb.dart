@@ -10,7 +10,7 @@ class ThermalUsb {
   }
 
   Future<bool> printTest({List<int> data = const []}) {
-    return ThermalUsbPlatform.instance.printTest(data: data);
+    return ThermalUsbPlatform.instance.print(data: data);
   }
 
   Future<void> pairDevice() {

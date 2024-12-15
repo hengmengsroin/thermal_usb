@@ -31,7 +31,7 @@ abstract class ThermalUsbPlatform extends PlatformInterface {
     throw UnimplementedError('getThermalStatus() has not been implemented.');
   }
 
-  Future<bool> printTest({List<int> data = const []}) {
+  Future<bool> print({List<int> data = const []}) {
     throw UnimplementedError('printTest() has not been implemented.');
   }
 

@@ -20,20 +20,20 @@ if ("usb" in navigator) {
     }
   }
 
-  function printTest(data) {
+  function print(data) {
     console.log("Print test");
     console.log({ data });
     /* Print the receipt */
     receiptPrinter.print(data);
   }
   window.connectUSBDevice = connectUSBDevice; // Expose function globally
-  window.printTest = printTest; // Expose function globally
+  window.print = print; // Expose function globally
 } else {
   console.log("WebUSB API is not supported in this browser.");
   window.connectUSBDevice = () => {
     console.error("WebUSB API is not supported in this browser.");
   };
-  window.printTest = () => {
+  window.print = () => {
     console.error("WebUSB API is not supported in this browser.");
   };
 }

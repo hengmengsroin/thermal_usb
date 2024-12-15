@@ -14,7 +14,7 @@ class MockThermalUsbPlatform
   Future<String?> getThermalStatus() => Future.value('cool');
 
   @override
-  Future<bool> printTest({List<int> data = const []}) => Future.value(true);
+  Future<bool> print({List<int> data = const []}) => Future.value(true);
 
   @override
   Future<void> pairDevice() {

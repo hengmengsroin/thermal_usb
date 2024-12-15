@@ -3,7 +3,6 @@
 // package as the core of your plugin.
 // ignore: avoid_web_libraries_in_flutter
 
-import 'dart:convert';
 import 'dart:developer';
 import 'dart:html';
 import 'dart:js' as js;
@@ -18,13 +17,6 @@ class ThermalUsbWeb extends ThermalUsbPlatform {
   /// Constructs a ThermalUsbWeb
   ThermalUsbWeb();
   final UsbDevice usbDevice = UsbDevice();
-  var pairedDevice;
-
-  //By Default, it is usually 0
-  var interfaceNumber = 0;
-
-  //By Default, it is usually 1
-  var endpointNumber = 1;
 
   static void registerWith(Registrar registrar) {
     ThermalUsbPlatform.instance = ThermalUsbWeb();
@@ -39,11 +31,6 @@ class ThermalUsbWeb extends ThermalUsbPlatform {
   }
 
   /// Returns a [String] containing the thermal status of the platform.
-  /// This is a placeholder implementation that always returns 'cool'.
-  /// This method should be overridden in a platform-specific implementation.
-  /// See: https://flutter.dev/docs/development/platform-integration/platform-channels
-  /// https://flutter.dev/docs/development/packages-and-plugins/developing-packages#platform-interface
-
   @override
   Future<String?> getThermalStatus() async {
     return 'cool';
@@ -59,9 +46,9 @@ class ThermalUsbWeb extends ThermalUsbPlatform {
   }
 
   @override
-  Future<bool> printTest({List<int> data = const []}) async {
+  Future<bool> print({List<int> data = const []}) async {
     try {
-      js.context.callMethod("printTest", [Uint8List.fromList(data)]);
+      js.context.callMethod("print", [Uint8List.fromList(data)]);
     } catch (e) {
       log(e.toString());
     }
