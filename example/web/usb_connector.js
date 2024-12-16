@@ -5,25 +5,24 @@ if ("serial" in navigator) {
   let lastUsedDevice = null;
   let receiptPrinter = new WebSerialReceiptPrinter();
   //  let receiptPrinter = new WebUSBReceiptPrinter();
-  if (lastUsedDevice) receiptPrinter.reconnect(lastUsedDevice);
+  // if (lastUsedDevice) receiptPrinter.reconnect(lastUsedDevice);
+  receiptPrinter.addEventListener("connected", (device) => {
+    console.log({ device });
+    lastUsedDevice = device;
+    // window.onDeviceConnected(device);
+    window.onDeviceConnected({
+      name: "WebUSB Printer",
+      vendorId: 0x04d8,
+      productId: 0x00df,
+    });
+  });
+
+  receiptPrinter.addEventListener("disconnect", () => {
+    console.log("Disconnected");
+    window.onDeviceDisconnected();
+  });
   async function connectUSBDevice() {
     try {
-      receiptPrinter.addEventListener("connected", (device) => {
-        console.log({ device });
-        lastUsedDevice = device;
-        // window.onDeviceConnected(device);
-        window.onDeviceConnected({
-          name: "WebUSB Printer",
-          vendorId: 0x04d8,
-          productId: 0x00df,
-        });
-      });
-
-      receiptPrinter.addEventListener("disconnect", () => {
-        console.log("Disconnected");
-        window.onDeviceDisconnected();
-      });
-
       receiptPrinter.connect();
       // navigator.serial.requestPort();
       // const port = await navigator.serial.requestPort();
@@ -36,8 +35,7 @@ if ("serial" in navigator) {
       // await writer.write(data);
       // writer.releaseLock();
       // await port.close();
-
-      console.log("Connected to:", port.getInfo());
+      // console.log("Connected to:", port.getInfo());
     } catch (error) {
       console.error("Error:", error);
       window.onError({

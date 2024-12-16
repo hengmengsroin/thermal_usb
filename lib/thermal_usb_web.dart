@@ -67,7 +67,7 @@ class ThermalUsbWeb extends ThermalUsbPlatform {
     js.context['onError'] = js.allowInterop((js.JsObject error) {
       log('error: $error');
       usbDevice = null;
-      _connectionState.add('error');
+      _connectionState.add('connect_error');
     });
   }
 
