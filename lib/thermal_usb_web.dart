@@ -4,12 +4,27 @@
 // ignore: avoid_web_libraries_in_flutter
 
 import 'dart:developer';
-import 'package:web/web.dart';
+import 'dart:js_interop';
 import 'dart:js' as js;
+import 'package:web/web.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter_web_plugins/flutter_web_plugins.dart';
 import 'package:thermal_usb/model/usb_device.dart';
 import 'thermal_usb_platform_interface.dart';
+
+@JS()
+external void connectUSBDevice();
+
+@JS('print')
+external void printReceipt(JSUint8Array data);
+
+@JS('onDeviceConnected') // Bind to the JavaScript global variable or function
+external JSExportedDartFunction onDeviceConnected(JSObject device);
+
+@JS('onDeviceDisconnected') // Bind to the JavaScript global variable or function
+external JSExportedDartFunction onDeviceDisconnected();
+
+// create JSFunction
 
 /// A web implementation of the ThermalUsbPlatform of the ThermalUsb plugin.
 class ThermalUsbWeb extends ThermalUsbPlatform {
@@ -38,10 +53,10 @@ class ThermalUsbWeb extends ThermalUsbPlatform {
           vendorId: "vendorId");
     });
 
-    js.context['onDeviceDisconnected'] = js.allowInterop(() {
-      log('Device disconnected: ');
-      usbDevice = null;
-    });
+    // js.context['onDeviceDisconnected'] = js.allowInterop(() {
+    //   log('Device disconnected: ');
+    //   usbDevice = null;
+    // });
   }
 
   /// Returns a [String] containing the version of the platform.
@@ -59,11 +74,8 @@ class ThermalUsbWeb extends ThermalUsbPlatform {
 
   @override
   Future<void> pairDevice() async {
-    if (usbDevice != null) {
-      return;
-    }
     try {
-      js.context.callMethod("connectUSBDevice");
+      connectUSBDevice();
     } catch (e) {
       log(e.toString());
     }
@@ -75,7 +87,9 @@ class ThermalUsbWeb extends ThermalUsbPlatform {
       if (usbDevice == null) {
         return Future.value(false);
       }
-      js.context.callMethod("print", [Uint8List.fromList(data)]);
+      var me = Uint8List.fromList(data);
+      var jsData = me.toJS;
+      printReceipt(jsData);
     } catch (e) {
       log(e.toString());
     }
