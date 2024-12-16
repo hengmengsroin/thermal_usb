@@ -1,6 +1,6 @@
 name: thermal_usb
 description: "A plugin for printing to USB thermal printers."
-version: 0.0.1+2
+version: 0.0.1+3
 homepage: "https://www.example.com"
 
 environment:

@@ -39,7 +39,7 @@ abstract class ThermalUsbPlatform extends PlatformInterface {
     throw UnimplementedError('printTest() has not been implemented.');
   }
 
-  Future<void> pairDevice() {
+  Future<bool> pairDevice() {
     throw UnimplementedError('pairDevice() has not been implemented.');
   }
 }

@@ -14,7 +14,7 @@ import 'package:thermal_usb/model/usb_device.dart';
 import 'thermal_usb_platform_interface.dart';
 
 @JS()
-external void connectUSBDevice();
+external JSPromise<JSBoolean> connectUSBDevice();
 
 @JS('print')
 external void printReceipt(JSUint8Array data);
@@ -34,6 +34,7 @@ class ThermalUsbWeb extends ThermalUsbPlatform {
   /// Constructs a ThermalUsbWeb
 
   static UsbDevice? usbDevice;
+  static bool connected = false;
 
   static final ThermalUsbWeb _staticInstance = ThermalUsbWeb();
 
@@ -55,18 +56,21 @@ class ThermalUsbWeb extends ThermalUsbPlatform {
           connected: true,
           productId: "productId",
           vendorId: "vendorId");
+      connected = true;
       _connectionState.add('connected');
     });
 
     js.context['onDeviceDisconnected'] = js.allowInterop(() {
       log('Device disconnected: ');
       usbDevice = null;
+      connected = false;
       _connectionState.add('disconnected');
     });
 
     js.context['onError'] = js.allowInterop((js.JsObject error) {
       log('error: $error');
       usbDevice = null;
+      connected = false;
       _connectionState.add('connect_error');
     });
   }
@@ -85,24 +89,29 @@ class ThermalUsbWeb extends ThermalUsbPlatform {
   }
 
   @override
-  Future<void> pairDevice() async {
+  Future<bool> pairDevice() async {
     _connectionState.add('connecting');
-    try {
-      connectUSBDevice();
-    } catch (e) {
-      log(e.toString());
-      _connectionState.add("error");
+    connected = (await connectUSBDevice().toDart).toDart;
+    log('connected: $connected');
+    if (connected) {
+      _connectionState.add('connected');
+    } else {
+      _connectionState.add('connect_error');
     }
+    return connected;
   }
 
   @override
   Future<bool> print({List<int> data = const []}) async {
-    _connectionState.add('printing');
     try {
+      if (connected == false) {
+        await pairDevice();
+      }
+      _connectionState.add('printing');
       var me = Uint8List.fromList(data);
       var jsData = me.toJS;
       printReceipt(jsData);
-      _connectionState.add('idle');
+      _connectionState.add('printed');
     } catch (e) {
       log(e.toString());
       _connectionState.add('print_error');

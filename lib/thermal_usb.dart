@@ -1,5 +1,4 @@
 import 'dart:async';
-
 import 'thermal_usb_platform_interface.dart';
 
 class ThermalUsb {
@@ -18,7 +17,7 @@ class ThermalUsb {
     return ThermalUsbPlatform.instance.print(data: data);
   }
 
-  Future<void> pairDevice() {
+  Future<bool> pairDevice() {
     return ThermalUsbPlatform.instance.pairDevice();
   }
 }

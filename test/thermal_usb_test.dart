@@ -19,7 +19,7 @@ class MockThermalUsbPlatform
   Future<bool> print({List<int> data = const []}) => Future.value(true);
 
   @override
-  Future<void> pairDevice() {
+  Future<bool> pairDevice() {
     throw UnimplementedError('pairDevice() has not been implemented.');
   }
 

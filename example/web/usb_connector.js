@@ -21,14 +21,15 @@ if ("serial" in navigator) {
     console.log("Disconnected");
     window.onDeviceDisconnected();
   });
+
+
   async function connectUSBDevice() {
     try {
-      receiptPrinter.connect();
+      await receiptPrinter.connect();
+      return true;
     } catch (error) {
       console.error("Error:", error);
-      window.onError({
-        error,
-      });
+      return false;
     }
   }
 
@@ -36,7 +37,6 @@ if ("serial" in navigator) {
     console.log("Print test");
     console.log({ data });
     /* Print the receipt */
-    receiptPrinter.reconnect(lastUsedDevice);
     receiptPrinter.print(data);
   }
   window.connectUSBDevice = connectUSBDevice; // Expose function globally

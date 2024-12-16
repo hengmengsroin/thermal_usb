@@ -31,8 +31,13 @@ class MethodChannelThermalUsb extends ThermalUsbPlatform {
   }
 
   @override
-  Future<void> pairDevice() async {
-    await methodChannel.invokeMethod<String>('pairDevice');
+  Future<bool> pairDevice() async {
+    try {
+      var connected = await methodChannel.invokeMethod<bool>('pairDevice');
+      return connected!;
+    } catch (e) {
+      return false;
+    }
   }
 
   final StreamController<String> _connectionState =
