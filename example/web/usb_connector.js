@@ -9,11 +9,11 @@ if ("serial" in navigator) {
   receiptPrinter.addEventListener("connected", (device) => {
     console.log({ device });
     lastUsedDevice = device;
-    // window.onDeviceConnected(device);
     window.onDeviceConnected({
       name: "WebUSB Printer",
-      vendorId: 0x04d8,
-      productId: 0x00df,
+      vendorId: device.vendorId ?? 1111,
+      productId: device.productId ?? 1111,
+      type: device.type,
     });
   });
 
@@ -24,18 +24,6 @@ if ("serial" in navigator) {
   async function connectUSBDevice() {
     try {
       receiptPrinter.connect();
-      // navigator.serial.requestPort();
-      // const port = await navigator.serial.requestPort();
-      // const info = port.getInfo();
-      // console.log({ info });
-      // await port.open({ baudRate: 9600 });
-      // const writer = port.writable.getWriter();
-
-      // const data = new Uint8Array([104, 101, 108, 108, 111]); // hello
-      // await writer.write(data);
-      // writer.releaseLock();
-      // await port.close();
-      // console.log("Connected to:", port.getInfo());
     } catch (error) {
       console.error("Error:", error);
       window.onError({
