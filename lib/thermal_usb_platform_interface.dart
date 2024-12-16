@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:plugin_platform_interface/plugin_platform_interface.dart';
 
 import 'thermal_usb_method_channel.dart';
@@ -5,6 +7,8 @@ import 'thermal_usb_method_channel.dart';
 abstract class ThermalUsbPlatform extends PlatformInterface {
   /// Constructs a ThermalUsbPlatform.
   ThermalUsbPlatform() : super(token: _token);
+
+  StreamController<String> get connectionState;
 
   static final Object _token = Object();
 

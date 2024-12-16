@@ -40,6 +40,9 @@ if ("serial" in navigator) {
       console.log("Connected to:", port.getInfo());
     } catch (error) {
       console.error("Error:", error);
+      window.onError({
+        error,
+      });
     }
   }
 

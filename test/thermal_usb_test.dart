@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:flutter_test/flutter_test.dart';
 import 'package:thermal_usb/thermal_usb.dart';
 import 'package:thermal_usb/thermal_usb_platform_interface.dart';
@@ -20,6 +22,9 @@ class MockThermalUsbPlatform
   Future<void> pairDevice() {
     throw UnimplementedError('pairDevice() has not been implemented.');
   }
+
+  @override
+  StreamController<String> get connectionState => throw UnimplementedError();
 }
 
 void main() {

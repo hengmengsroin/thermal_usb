@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:flutter/foundation.dart';
 import 'package:flutter/services.dart';
 
@@ -32,4 +34,10 @@ class MethodChannelThermalUsb extends ThermalUsbPlatform {
   Future<void> pairDevice() async {
     await methodChannel.invokeMethod<String>('pairDevice');
   }
+
+  final StreamController<String> _connectionState =
+      StreamController<String>.broadcast();
+
+  @override
+  StreamController<String> get connectionState => _connectionState;
 }

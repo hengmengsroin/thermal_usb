@@ -71,6 +71,16 @@ class _MyAppState extends State<MyApp> {
             spacing: 10,
             children: [
               Text('Running on: $_platformVersion\n'),
+              StreamBuilder<String>(
+                stream: _thermalUsbPlugin.connectionState.stream,
+                builder: (context, snapshot) {
+                  if (snapshot.hasData) {
+                    return Text('Connection State: ${snapshot.data}');
+                  } else {
+                    return Text('Connection State: Unknown');
+                  }
+                },
+              ),
               ElevatedButton(onPressed: connectUSB, child: Text("Connect USB")),
               ElevatedButton(
                   onPressed: () async {

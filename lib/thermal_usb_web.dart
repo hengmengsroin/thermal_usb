@@ -3,6 +3,7 @@
 // package as the core of your plugin.
 // ignore: avoid_web_libraries_in_flutter
 
+import 'dart:async';
 import 'dart:developer';
 import 'dart:js_interop';
 import 'dart:js' as js;
@@ -24,6 +25,8 @@ external JSExportedDartFunction onDeviceConnected(JSObject device);
 @JS('onDeviceDisconnected') // Bind to the JavaScript global variable or function
 external JSExportedDartFunction onDeviceDisconnected();
 
+@JS('onError') // Bind to the JavaScript global variable or function
+external JSExportedDartFunction onError(JSObject device);
 // create JSFunction
 
 /// A web implementation of the ThermalUsbPlatform of the ThermalUsb plugin.
@@ -34,7 +37,8 @@ class ThermalUsbWeb extends ThermalUsbPlatform {
 
   static final ThermalUsbWeb _staticInstance = ThermalUsbWeb();
 
-  static Stream eventSubscription = Stream.empty();
+  static final StreamController<String> _connectionState =
+      StreamController<String>.broadcast();
 
   static ThermalUsbWeb getInstance() {
     return _staticInstance;
@@ -51,12 +55,20 @@ class ThermalUsbWeb extends ThermalUsbPlatform {
           connected: true,
           productId: "productId",
           vendorId: "vendorId");
+      _connectionState.add('connected');
     });
 
-    // js.context['onDeviceDisconnected'] = js.allowInterop(() {
-    //   log('Device disconnected: ');
-    //   usbDevice = null;
-    // });
+    js.context['onDeviceDisconnected'] = js.allowInterop(() {
+      log('Device disconnected: ');
+      usbDevice = null;
+      _connectionState.add('disconnected');
+    });
+
+    js.context['onError'] = js.allowInterop((js.JsObject error) {
+      log('error: $error');
+      usbDevice = null;
+      _connectionState.add('error');
+    });
   }
 
   /// Returns a [String] containing the version of the platform.
@@ -74,24 +86,26 @@ class ThermalUsbWeb extends ThermalUsbPlatform {
 
   @override
   Future<void> pairDevice() async {
+    _connectionState.add('connecting');
     try {
       connectUSBDevice();
     } catch (e) {
       log(e.toString());
+      _connectionState.add("error");
     }
   }
 
   @override
   Future<bool> print({List<int> data = const []}) async {
+    _connectionState.add('printing');
     try {
-      if (usbDevice == null) {
-        return Future.value(false);
-      }
       var me = Uint8List.fromList(data);
       var jsData = me.toJS;
       printReceipt(jsData);
+      _connectionState.add('idle');
     } catch (e) {
       log(e.toString());
+      _connectionState.add('print_error');
     }
     return Future.value(true);
   }
@@ -101,8 +115,10 @@ class ThermalUsbWeb extends ThermalUsbPlatform {
     script.src = 'assets/lib/usb_connector.js';
     script.type = 'text/javascript';
     document.body!.append(script);
-
     await script.onLoad.first;
     log('JavaScript file loaded successfully.');
   }
+
+  @override
+  StreamController<String> get connectionState => _connectionState;
 }

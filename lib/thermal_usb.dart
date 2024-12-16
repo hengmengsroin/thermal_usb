@@ -1,6 +1,11 @@
+import 'dart:async';
+
 import 'thermal_usb_platform_interface.dart';
 
 class ThermalUsb {
+  StreamController<String> get connectionState =>
+      ThermalUsbPlatform.instance.connectionState;
+
   Future<String?> getPlatformVersion() {
     return ThermalUsbPlatform.instance.getPlatformVersion();
   }
