@@ -7,8 +7,8 @@ import 'dart:async';
 import 'dart:developer';
 import 'dart:js_interop';
 import 'dart:js' as js;
+import 'package:flutter/services.dart';
 import 'package:web/web.dart';
-import 'package:flutter/foundation.dart';
 import 'package:flutter_web_plugins/flutter_web_plugins.dart';
 import 'package:thermal_usb/model/usb_device.dart';
 import 'thermal_usb_platform_interface.dart';
@@ -120,11 +120,22 @@ class ThermalUsbWeb extends ThermalUsbPlatform {
   }
 
   static Future<void> loadJavaScript() async {
-    final script = document.createElement('script') as HTMLScriptElement;
-    script.src = 'assets/lib/usb_connector.js';
-    script.type = 'text/javascript';
-    document.body!.append(script);
-    await script.onLoad.first;
+    final libraryJs = rootBundle.loadString('assets/lib/usb_connector.js');
+    log(document.body!.toString());
+    final script1 = document.createElement('script') as HTMLScriptElement;
+    script1.type = 'text/javascript';
+    script1.text = libraryJs.toString();
+    document.body!.append(script1);
+    await script1.onLoad.first;
+
+    final webLibrary =
+        rootBundle.loadString('assets/lib/webserial-receipt-printer.umd.js');
+    final script2 = document.createElement('script') as HTMLScriptElement;
+    script2.text = webLibrary.toString();
+    script2.type = 'text/javascript';
+    document.body!.append(script2);
+    await script2.onLoad.first;
+
     log('JavaScript file loaded successfully.');
   }
 
