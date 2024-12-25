@@ -3,8 +3,8 @@ if ("serial" in navigator) {
   console.log("WebUSB API is supported in this browser.");
   // const userAgent = navigator.userAgent.toLowerCase();
   let lastUsedDevice = null;
-  let receiptPrinter = new WebSerialReceiptPrinter();
-  //  let receiptPrinter = new WebUSBReceiptPrinter();
+  // let receiptPrinter = new WebSerialReceiptPrinter();
+  let receiptPrinter = new WebUSBReceiptPrinter();
   // if (lastUsedDevice) receiptPrinter.reconnect(lastUsedDevice);
   receiptPrinter.addEventListener("connected", (device) => {
     console.log({ device });

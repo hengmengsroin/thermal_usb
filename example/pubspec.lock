@@ -271,6 +271,14 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "5.0.2"
+  qz:
+    dependency: "direct main"
+    description:
+      name: qz
+      sha256: "5b6e3c438e5452a1c58a107ccafa3eead39223de7c922d848ffd12e943862789"
+      url: "https://pub.dev"
+    source: hosted
+    version: "1.0.0+1"
   sky_engine:
     dependency: transitive
     description: flutter
@@ -338,7 +346,7 @@ packages:
       path: ".."
       relative: true
     source: path
-    version: "0.0.1+3"
+    version: "0.0.1+4"
   typed_data:
     dependency: transitive
     description:
