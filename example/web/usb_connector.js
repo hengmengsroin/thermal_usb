@@ -25,8 +25,8 @@ if ("serial" in navigator) {
 
   async function connectUSBDevice() {
     try {
-      await receiptPrinter.connect();
-      return true;
+      const result = await receiptPrinter.connect();
+      return result;
     } catch (error) {
       console.error("Error:", error);
       return false;
