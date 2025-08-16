@@ -6,28 +6,26 @@
 import 'dart:async';
 import 'dart:developer';
 import 'dart:js_interop';
-import 'dart:js' as js;
 import 'package:flutter/services.dart';
 import 'package:web/web.dart';
 import 'package:flutter_web_plugins/flutter_web_plugins.dart';
 import 'package:thermal_usb/model/usb_device.dart';
 import 'thermal_usb_platform_interface.dart';
 
-@JS()
+@JS("connectUSBDevice") // Bind to the JavaScript global variable or function
 external JSPromise<JSBoolean> connectUSBDevice();
 
 @JS('print')
 external void printReceipt(JSUint8Array data);
 
 @JS('onDeviceConnected') // Bind to the JavaScript global variable or function
-external JSExportedDartFunction onDeviceConnected(JSObject device);
+external set onDeviceConnected(JSFunction f);
 
 @JS('onDeviceDisconnected') // Bind to the JavaScript global variable or function
-external JSExportedDartFunction onDeviceDisconnected();
+external set onDeviceDisconnected(JSFunction f);
 
 @JS('onError') // Bind to the JavaScript global variable or function
-external JSExportedDartFunction onError(JSObject device);
-// create JSFunction
+external set onError(JSFunction f);
 
 /// A web implementation of the ThermalUsbPlatform of the ThermalUsb plugin.
 class ThermalUsbWeb extends ThermalUsbPlatform {
@@ -47,8 +45,15 @@ class ThermalUsbWeb extends ThermalUsbPlatform {
 
   static void registerWith(Registrar registrar) {
     ThermalUsbPlatform.instance = ThermalUsbWeb();
-    // loadJavaScript();
-    js.context['onDeviceConnected'] = js.allowInterop((js.JsObject device) {
+
+    onDeviceDisconnected = () {
+      log('Device disconnected');
+      usbDevice = null;
+      connected = false;
+      _connectionState.add('disconnected');
+    }.toJS;
+
+    onDeviceConnected = (JSObject device) {
       log('Device connected: $device');
       // convert JSObject to Map
       usbDevice = UsbDevice(
@@ -58,21 +63,41 @@ class ThermalUsbWeb extends ThermalUsbPlatform {
           vendorId: "vendorId");
       connected = true;
       _connectionState.add('connected');
-    });
+    }.toJS;
 
-    js.context['onDeviceDisconnected'] = js.allowInterop(() {
-      log('Device disconnected: ');
-      usbDevice = null;
-      connected = false;
-      _connectionState.add('disconnected');
-    });
-
-    js.context['onError'] = js.allowInterop((js.JsObject error) {
+    onError = (JSObject error) {
       log('error: $error');
       usbDevice = null;
       connected = false;
       _connectionState.add('connect_error');
-    });
+    }.toJS;
+
+    // loadJavaScript();
+    // js.context['onDeviceConnected'] = js.allowInterop((js.JsObject device) {
+    //   log('Device connected: $device');
+    //   // convert JSObject to Map
+    //   usbDevice = UsbDevice(
+    //       type: "type",
+    //       connected: true,
+    //       productId: "productId",
+    //       vendorId: "vendorId");
+    //   connected = true;
+    //   _connectionState.add('connected');
+    // });
+
+    // js.context['onDeviceDisconnected'] = js.allowInterop(() {
+    //   log('Device disconnected: ');
+    //   usbDevice = null;
+    //   connected = false;
+    //   _connectionState.add('disconnected');
+    // });
+
+    // js.context['onError'] = js.allowInterop((js.JsObject error) {
+    //   log('error: $error');
+    //   usbDevice = null;
+    //   connected = false;
+    //   _connectionState.add('connect_error');
+    // });
   }
 
   /// Returns a [String] containing the version of the platform.

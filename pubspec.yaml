@@ -1,6 +1,6 @@
 name: thermal_usb
 description: "A plugin for printing to USB thermal printers."
-version: 0.0.1+4
+version: 0.1.0+5
 homepage: "https://github.com/hengmengsroin/thermal_usb.git"
 
 environment:
@@ -13,7 +13,6 @@ dependencies:
   flutter_web_plugins:
     sdk: flutter
   web: ^1.1.0
-  js: ^0.6.3
   plugin_platform_interface: ^2.1.8
 
 dev_dependencies:
