@@ -1,6 +1,6 @@
 name: thermal_usb
 description: "A plugin for printing to USB thermal printers."
-version: 0.1.0+5
+version: 0.1.1
 homepage: "https://github.com/hengmengsroin/thermal_usb.git"
 
 environment:
